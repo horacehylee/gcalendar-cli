@@ -1,0 +1,50 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "[Mocha] Run Current Test",
+            "type": "shell",
+            "command": ".\\node_modules\\.bin\\mocha -r .\\node_modules\\ts-node\\register",
+            "args": [
+                    "${relativeFile}"
+            ],
+            "group": "test",
+            "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "dedicated"
+            }
+        },
+        {
+            "label": "[Mocha] Run Tests for Folder",
+            "type": "shell",
+            "command": ".\\node_modules\\.bin\\mocha --recursive -r .\\node_modules\\ts-node\\register",
+            "args": [
+                    "${fileDirname}/**/*.spec.ts"
+            ],
+            "group": "test",
+            "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "dedicated"
+            }
+        },
+        {
+            "label": "[Mocha] Run Tests for Project",
+            "type": "shell",
+            "command": ".\\node_modules\\.bin\\mocha --recursive -r .\\node_modules\\ts-node\\register",
+            "args": [
+                    "${workspaceFolder}/src/**/*.spec.ts"
+            ],
+            "group": "test",
+            "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "dedicated"
+            }
+        }
+    ]
+}

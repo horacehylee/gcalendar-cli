@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "./",
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "declaration": true,
+        "declarationDir": "build/types",
+        "sourceMap": true,
+        "lib": [
+            "es2017",
+            "dom"
+        ],
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "types": [
+            "node"
+        ]
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts",
+        "**/__test__"
+    ]
+}
