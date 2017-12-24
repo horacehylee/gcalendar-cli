@@ -15,46 +15,13 @@ chai.use(chaiAsPromised);
 
 import * as googleCalendar from './../src/modules/google-calendar/google-calendar';
 import { GCalEvent } from './../src/modules/google-calendar/models/event';
-import { renderEvents } from './../src/modules/google-calendar/renderer/cli-renderer';
+import { renderEventsList } from './../src/modules/google-calendar/renderer/cli-renderer';
+import { flatten } from 'lodash';
+import * as parse from 'date-fns/parse';
 
 describe('Google Calendar', () => {
 
-    describe('Mapping', () => {
-        describe('GCalEvent gen', () => {
-            it('should map to GCalEvent obj', () => {
-                const { items: events } = require('./data/event.list.json');
-                const gCalEvents = (<any[]>events).map(GCalEvent.gen);
-                expect(gCalEvents).to.not.be.null;
-                expect(gCalEvents).to.be.deep.equal([
-                    {
-                        summary: '2018',
-                        calendarId: 'unknownorganizer@calendar.google.com',
-                        allDay: { startDate: '2018-01-21', endDate: '2018-01-22' }
-                    },
-                    {
-                        summary: 'Run',
-                        calendarId: 'unknownorganizer@calendar.google.com',
-                        startDateTime: '2017-12-27T18:30:00+08:00',
-                        endDateTime: '2017-12-27T19:00:00+08:00'
-                    },
-                    {
-                        summary: 'Outdark',
-                        calendarId: 'abc@gmail.com',
-                        startDateTime: '2017-12-25T19:00:00+08:00',
-                        endDateTime: '2017-12-25T20:00:00+08:00'
-                    },
-                    {
-                        summary: 'Run',
-                        calendarId: 'unknownorganizer@calendar.google.com',
-                        startDateTime: '2018-01-17T18:30:00+08:00',
-                        endDateTime: '2018-01-17T19:00:00+08:00'
-                    }
-                ])
-            })
-        });
-    });
-
-    describe.only('Render', () => {
+    describe('Render', () => {
         describe('Events', () => {
             const events = [
                 {
@@ -81,7 +48,7 @@ describe('Google Calendar', () => {
                     endDateTime: '2018-01-17T19:00:00+08:00'
                 }
             ];
-            renderEvents(<any>events);
+            renderEventsList(<any>events);
         });
     });
 

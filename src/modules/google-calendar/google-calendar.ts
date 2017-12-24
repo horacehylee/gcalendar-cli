@@ -5,6 +5,8 @@ import * as moment from 'moment';
 import { default as chalk } from 'chalk';
 import { Calendar } from './models/calendar';
 import { plainToClass } from 'class-transformer';
+import { GCalEvent } from './models/event';
+import { flatten } from 'lodash';
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 
@@ -15,6 +17,10 @@ const showId = false;
 export const getCalendarClient = async () => {
     const oauth2Client = await authorize(SCOPES);
     return google.calendar({ version: 'v3', auth: oauth2Client });
+}
+
+export const sortEvents = () => {
+    
 }
 
 export const listCalendars = async (calendar) => {
@@ -42,6 +48,9 @@ export const listEvents = async (calendar, calendarId = 'primary') => {
         nextPageToken,
         items: events
     } = await promisify<any, any>(calendar.events.list)(params);
+    const gCalEvents = flatten((<any[]>events).map(GCalEvent.gen));
+
+
 
     // if (events.length == 0) {
     //     console.log('No upcoming events found.');
