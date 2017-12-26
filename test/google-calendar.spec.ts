@@ -36,7 +36,7 @@ describe('Google Calendar', () => {
         });
     });
 
-    describe('List events', () => {
+    describe.only('List events', () => {
         it('should return list of events', async () => {
             const client = await googleCalendar.getCalendarClient();
             const events = await googleCalendar.listEvents(client);

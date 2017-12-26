@@ -65,11 +65,17 @@ export const ListCommand: CommandModule = {
         log(pretty(options));
 
         const client = await getCalendarClient();
-        let calendars = await listCalendars(client);
-        const listEventPromises = calendars.map((calendar) => listEvents(client, calendar.id, {
-            timeMin: options.from,
-            timeMax: options.to,
-        }));
+        // let calendars = await listCalendars(client);
+        // const listEventPromises = calendars.map((calendar) => listEvents(client, calendar.id, {
+        //     timeMin: options.from,
+        //     timeMax: options.to,
+        // }));
+        const listEventPromises = [
+            listEvents(client, 'primary', {
+                timeMin: options.from,
+                timeMax: options.to,
+            })
+        ]
         const eventPromiseResponses = await Promise.all(listEventPromises);
         let gCalEvents = flatten(eventPromiseResponses);
         gCalEvents = filterWithRange(options.from, options.to)(gCalEvents);

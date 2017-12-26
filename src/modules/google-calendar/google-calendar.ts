@@ -5,7 +5,7 @@ import { default as chalk } from 'chalk';
 import { Calendar } from './models/calendar';
 import { plainToClass } from 'class-transformer';
 import { GCalEvent } from './models/event';
-import { flatten } from 'lodash';
+import { flatten, isEmpty } from 'lodash';
 import * as addWeeks from 'date-fns/add_weeks';
 
 const error = console.error;
@@ -22,10 +22,6 @@ const showId = false;
 export const getCalendarClient = async () => {
     const oauth2Client = await authorize(SCOPES);
     return google.calendar({ version: 'v3', auth: oauth2Client });
-}
-
-export const sortEvents = () => {
-
 }
 
 export const listCalendars = async (calendar) => {
@@ -49,17 +45,30 @@ export const listEvents = async (calendarClient, calendarId = 'primary', options
     const params: any = {
         calendarId: encodeURIComponent(calendarId),
         timeMin: options.timeMin ? options.timeMin.toISOString() : new Date().toISOString(),
-        timeMax: options.timeMax ? options.timeMax.toISOString() : addWeeks(new Date() ,1).toISOString(),
-        maxResults: 20,
+        timeMax: options.timeMax ? options.timeMax.toISOString() : addWeeks(new Date(), 1).toISOString(),
+        maxResults: 100,
         singleEvents: true,
         orderBy: 'startTime'
     };
+    const calendarClientEventListPromise = promisify<any, any>(calendarClient.events.list);
     try {
-        const {
-            nextPageToken,
-            items: events
-        } = await promisify<any, any>(calendarClient.events.list)(params);
-        const gCalEvents = flatten((<any[]>events).map(GCalEvent.gen));
+        let events = [];
+        let pageToken = '';
+        do {
+            const pagingParams = {
+                ...params,
+                pageToken: pageToken,
+            }
+            const {
+                nextPageToken,
+                items
+            } = await calendarClientEventListPromise(pagingParams);
+            pageToken = nextPageToken;
+            events = events.concat(items);
+
+        } while (!isEmpty(pageToken))
+
+        const gCalEvents = flatten(events.map(GCalEvent.gen));
         return gCalEvents;
     } catch (e) {
         error(`calendarId(${calendarId}) has error`, e);
