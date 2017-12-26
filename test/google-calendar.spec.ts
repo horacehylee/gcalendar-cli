@@ -21,37 +21,6 @@ import * as parse from 'date-fns/parse';
 
 describe('Google Calendar', () => {
 
-    describe('Render', () => {
-        describe('Events', () => {
-            const events = [
-                {
-                    summary: '2018',
-                    calendarId: 'unknownorganizer@calendar.google.com',
-                    allDay: { startDate: '2018-01-21', endDate: '2018-01-22' }
-                },
-                {
-                    summary: 'Run',
-                    calendarId: 'unknownorganizer@calendar.google.com',
-                    startDateTime: '2017-12-27T18:30:00+08:00',
-                    endDateTime: '2017-12-27T19:00:00+08:00'
-                },
-                {
-                    summary: 'Outdark',
-                    calendarId: 'abc@gmail.com',
-                    startDateTime: '2017-12-25T19:00:00+08:00',
-                    endDateTime: '2017-12-25T20:00:00+08:00'
-                },
-                {
-                    summary: 'Run',
-                    calendarId: 'unknownorganizer@calendar.google.com',
-                    startDateTime: '2018-01-17T18:30:00+08:00',
-                    endDateTime: '2018-01-17T19:00:00+08:00'
-                }
-            ];
-            renderEventsList(<any>events);
-        });
-    });
-
     describe('Get Client', () => {
         it('should return google calendar client', async () => {
             const client = await googleCalendar.getCalendarClient();

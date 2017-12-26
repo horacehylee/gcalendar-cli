@@ -9,12 +9,12 @@ module.exports = {
     };
 
     config.module.rules.push(
-      {
-        test: /\.ts$/,
-        loader: 'lodash-ts-imports-loader',
-        exclude: /node_modules/,
-        enforce: "pre"
-      },
+      // {
+      //   test: /\.ts$/,
+      //   loader: 'lodash-ts-imports-loader',
+      //   exclude: /node_modules/,
+      //   enforce: "pre"
+      // },
       {
         test: /^(?!.*\.spec\.ts$).*\.ts$/,
         loader: 'awesome-typescript-loader',
