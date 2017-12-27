@@ -47,7 +47,7 @@ Options:
   --range, -r  Date range of events in natural language                 [string]
 ```
 
-List events using natural language (powered by [Sherlock](https://github.com/neilgupta/Sherlock)):
+#### List events using natural language (powered by [Sherlock](https://github.com/neilgupta/Sherlock)):
 ```
 gcal ls -r "tomorrow"
 ```
@@ -55,12 +55,12 @@ gcal ls -r "tomorrow"
 gcal ls -r "from 25 Dec to 27 Dec"
 ```
 
-List events with 3 days from now
+#### List events with 3 days from now
 ```
 gcal ls -d 3
 ```
 
-List events only for today
+#### List events only for today
 ```
 gcal ls -d 0
 ```
@@ -79,7 +79,7 @@ Options:
   --calendar, -c  Calendar for event to insert                          [string]
 ```
 
-Insert events using natural language:
+#### Insert events using natural language:
 
 All day event: 
 
@@ -97,7 +97,7 @@ Timed event:
 gcal insert "Party tomorrow from 2pm to 7pm"
 ```
 
-Insert events with duration:
+#### Insert events with duration:
 
 Party tomrrow from 2pm to 7pm (5 Hours):
 
