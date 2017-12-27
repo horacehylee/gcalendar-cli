@@ -21,6 +21,14 @@ module.exports = {
       }
     );
 
+    config.plugins.push(
+      new webpack.optimize.ModuleConcatenationPlugin(),
+      new webpack.BannerPlugin({
+        banner: '#!/usr/bin/env node',
+        raw: true,
+      }),
+    )
+
     return config
   }
 }

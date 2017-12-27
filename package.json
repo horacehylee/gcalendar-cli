@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.spec.ts || exit 0",
     "start": "npm run build && node ./build/main.js",
-    "build": "backpack build"
+    "build": "backpack build",
+    "publish": "npm run build && npm publish"
   },
   "bin": {
     "gcal": "./build/main.js"
