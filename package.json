@@ -1,7 +1,7 @@
 {
   "name": "gcalendar-cli",
   "version": "1.0.0",
-  "description": "",
+  "description": "Google Calendar cli tool for Node.js",
   "main": "./build/main.js",
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.spec.ts || exit 0",
@@ -11,9 +11,18 @@
   "bin": {
     "gcal": "./build/main.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "gcal",
+    "google",
+    "calendar",
+    "cli",
+    "google-calendar"
+  ],
+  "author": "Horace Lee",
   "license": "ISC",
+  "files": [
+    "build"
+  ],
   "dependencies": {
     "@types/bluebird": "3.5.19",
     "@types/inquirer": "0.0.36",
