@@ -25,9 +25,23 @@ You will need a file with your credentials: `client ID`, `client secret` and `re
 
 ### 2) Get token
 
-TODO:
 ```
 gcal setup
+```
+
+Login with your Google account and approve the permissions.
+
+Copy the token back to the terminal.
+
+You should see `✔️ You are ready to go!`
+
+Example:
+
+```
+Authorize this app by visiting this url:
+https://accounts.google.com/o/oauth2/auth?access_type=offline&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcalendar.readonly&response_type=code&client_id=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&redirect_uri=urn%3Aietf%3Awg%3Aoauth%3A2.0%3Aoob
+? Enter the code from that page here: x/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+✔️ You are ready to go!
 ```
 
 ## Usage

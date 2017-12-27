@@ -4,6 +4,8 @@ import { promisify } from 'bluebird';
 import { TOKEN_PATH, CRED_PATH } from './../../config';
 import * as readline from 'readline';
 import * as inquirer from 'inquirer';
+import chalk from 'chalk';
+import * as opn from 'opn';
 
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
@@ -26,7 +28,8 @@ const fetchToken = (scopes: string[]) => async (oauth2Client) => {
         access_type: 'offline',
         scope: scopes
     });
-    console.log('Authorize this app by visiting this url: ', authUrl);
+    console.log(`Authorize this app by visiting this url:\n${chalk.greenBright(authUrl)}`);
+    opn(authUrl);
     const rl = readline.createInterface({
         input: process.stdin,
         output: process.stdout

@@ -1,8 +1,10 @@
 import { Argv } from "yargs";
 import { ListCommand } from "./list";
 import { InsertCommand } from "./insert";
+import { SetupCommand } from "./setup";
 
 export const registerCommands = (argv: Argv) => {
+    argv.command(SetupCommand)
     argv.command(ListCommand)
     argv.command(InsertCommand)
     return argv;
