@@ -10,6 +10,7 @@ import * as addHours from 'date-fns/add_hours';
 import sentenceCase = require('sentence-case');
 import { getCalendarClient, insertEvent } from '../modules/google-calendar/google-calendar';
 import chalk from 'chalk';
+import { loading } from './../modules/promise-loading/promise-loading'
 
 const END_TIME_HOUR_OFFSET = 1;
 
@@ -96,13 +97,14 @@ export const InsertCommand: CommandModule = {
             return;
         }
 
-        const calendarClient = await getCalendarClient();
-        await insertEvent(calendarClient)({
+        const calendarClient = await loading({message: 'Creating calendar client'})(getCalendarClient());
+        const insertEventPromise = insertEvent(calendarClient)({
             start: options.start,
             end: options.end,
             isAllDay: options.isAllDay,
             summary: options.title,
         })(calendar)
+        await loading({message: 'Inserting event'})(insertEventPromise);
 
         log('Event is inserted')
     }

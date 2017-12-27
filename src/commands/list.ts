@@ -17,6 +17,7 @@ import { resetTime, ppObjDate } from '../modules/google-calendar/fns/util.fns';
 import { filterWithRange } from '../modules/google-calendar/fns/event.fns';
 import { HolidayCalendar, filterCalendarUrl } from '../modules/google-calendar-holiday/google-calendar-holiday';
 import { log, pretty } from './index';
+import { loading } from './../modules/promise-loading/promise-loading'
 
 const TO_DAY_OFFSET = 3;
 
@@ -64,7 +65,7 @@ export const ListCommand: CommandModule = {
         }
         log(pretty(ppObjDate(options)));
 
-        const calendarClient = await getCalendarClient();
+        const calendarClient = await loading({ message: 'Creating calendar client' })(getCalendarClient());
         let calendars = await listCalendars(calendarClient);
         const calendarIds = calendars.map((calendar) => calendar.id);
 
@@ -72,13 +73,13 @@ export const ListCommand: CommandModule = {
             timeMin: options.from,
             timeMax: options.to,
         }));
-        const eventPromiseResponses = await Promise.all(listEventPromises);
+        const eventPromiseResponses = await loading({ message: 'Fetching events' })(Promise.all(listEventPromises));
         let gCalEvents = flatten(eventPromiseResponses);
         gCalEvents = filterWithRange(options.from, options.to)(gCalEvents);
 
         const holidayCalendarUrls = filterCalendarUrl(calendarIds);
         const holidayCalendar = new HolidayCalendar(holidayCalendarUrls);
-        await holidayCalendar.prefetchRange(calendarClient, options.from, options.to);
+        await loading({ message: 'Fetching holidays' })(holidayCalendar.prefetchRange(calendarClient, options.from, options.to));
 
         if (table) {
             renderEventsTable(holidayCalendar)(gCalEvents);
