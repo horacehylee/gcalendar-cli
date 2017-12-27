@@ -6,12 +6,16 @@ import { flatten, find } from 'lodash';
 import { listEvents } from '../google-calendar/google-calendar';
 import { GCalEvent } from '../google-calendar/models/event';
 
-const HOLIDAY_REGEX = new RegExp('(#holiday@group.v.calendar.google.com)$', 'g');
+const HOLIDAY_REGEX = new RegExp('(#holiday@group\.v\.calendar\.google\.com)$');
 
 export const verifyCalendarUrl = (url: string) => {
     if (!HOLIDAY_REGEX.test(url)) {
         throw new Error(`url(${url}) is not a valid holiday calendar url`);
     }
+}
+
+export const filterCalendarUrl = (urls: string[]): string[] => {
+    return urls.filter((url) => HOLIDAY_REGEX.test(url));
 }
 
 export class HolidayCalendar {
@@ -20,7 +24,7 @@ export class HolidayCalendar {
     holidays: Holiday[] = [];
 
     constructor(calendarUrls: string[]) {
-        calendarUrls.forEach(verifyCalendarUrl);
+        calendarUrls.forEach((url) => verifyCalendarUrl(url));
         this.calendarUrls = calendarUrls;
     }
 
@@ -29,10 +33,15 @@ export class HolidayCalendar {
             timeMin: from,
             timeMax: to,
         }));
-        const eventPromiseResponses = await Promise.all(listEventPromises);
-        const gCalEvents = flatten(eventPromiseResponses);
-        const fetchedHolidays = gCalEvents.map(Holiday.gen);
-        this.holidays = this.holidays.concat(fetchedHolidays);
+        try {
+            const eventPromiseResponses = await Promise.all(listEventPromises);
+            const gCalEvents = flatten(eventPromiseResponses);
+            const fetchedHolidays = gCalEvents.map(Holiday.gen);
+            this.holidays = this.holidays.concat(fetchedHolidays);
+        } catch (e) {
+            console.log('error', e);
+            throw e;
+        }
     }
 
     isHoliday(date: Date): boolean {

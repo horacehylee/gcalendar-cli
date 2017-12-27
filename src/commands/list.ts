@@ -15,6 +15,7 @@ import * as setMilliseconds from 'date-fns/set_milliseconds';
 
 import { resetTime, toDisplayDateTime } from '../modules/google-calendar/fns/util.fns';
 import { filterWithRange } from '../modules/google-calendar/fns/event.fns';
+import { HolidayCalendar, filterCalendarUrl } from '../modules/google-calendar-holiday/google-calendar-holiday';
 
 const log = console.log;
 const pretty = (obj) => JSON.stringify(obj, null, 2);
@@ -67,9 +68,11 @@ export const ListCommand: CommandModule = {
             to: toDisplayDateTime(options.to),
         }));
 
-        const client = await getCalendarClient();
-        let calendars = await listCalendars(client);
-        const listEventPromises = calendars.map((calendar) => listEvents(client, calendar.id, {
+        const calendarClient = await getCalendarClient();
+        let calendars = await listCalendars(calendarClient);
+        const calendarIds = calendars.map((calendar) => calendar.id);
+
+        const listEventPromises = calendarIds.map((calendarId) => listEvents(calendarClient, calendarId, {
             timeMin: options.from,
             timeMax: options.to,
         }));
@@ -77,10 +80,14 @@ export const ListCommand: CommandModule = {
         let gCalEvents = flatten(eventPromiseResponses);
         gCalEvents = filterWithRange(options.from, options.to)(gCalEvents);
 
+        const holidayCalendarUrls = filterCalendarUrl(calendarIds);
+        const holidayCalendar = new HolidayCalendar(holidayCalendarUrls);
+        await holidayCalendar.prefetchRange(calendarClient, options.from, options.to);
+
         if (table) {
-            renderEventsTable(gCalEvents);
+            renderEventsTable(holidayCalendar)(gCalEvents);
         } else {
-            renderEventsList(gCalEvents);
+            renderEventsList(holidayCalendar)(gCalEvents);
         }
     }
 }
