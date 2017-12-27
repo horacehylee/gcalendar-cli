@@ -13,17 +13,16 @@ import * as setMinutes from 'date-fns/set_minutes';
 import * as setSeconds from 'date-fns/set_seconds';
 import * as setMilliseconds from 'date-fns/set_milliseconds';
 
-import { resetTime, toDisplayDateTime } from '../modules/google-calendar/fns/util.fns';
+import { resetTime, ppObjDate } from '../modules/google-calendar/fns/util.fns';
 import { filterWithRange } from '../modules/google-calendar/fns/event.fns';
 import { HolidayCalendar, filterCalendarUrl } from '../modules/google-calendar-holiday/google-calendar-holiday';
-
-const log = console.log;
-const pretty = (obj) => JSON.stringify(obj, null, 2);
+import { log, pretty } from './index';
 
 const TO_DAY_OFFSET = 3;
 
 export const ListCommand: CommandModule = {
-    command: 'event list',
+    command: 'list',
+    aliases: 'ls',
     describe: 'List google calendar events',
     builder: {
         table: {
@@ -63,10 +62,7 @@ export const ListCommand: CommandModule = {
             from: fromDate,
             to: toDate ? toDate : resetTime(addDays(fromDate, dayOffset)),
         }
-        log(pretty({
-            from: toDisplayDateTime(options.from),
-            to: toDisplayDateTime(options.to),
-        }));
+        log(pretty(ppObjDate(options)));
 
         const calendarClient = await getCalendarClient();
         let calendars = await listCalendars(calendarClient);

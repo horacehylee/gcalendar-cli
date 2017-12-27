@@ -7,6 +7,7 @@ import { plainToClass } from 'class-transformer';
 import { GCalEvent } from './models/event';
 import { flatten, isEmpty } from 'lodash';
 import * as addWeeks from 'date-fns/add_weeks';
+import * as format from 'date-fns/format';
 
 const error = console.error;
 
@@ -15,9 +16,8 @@ const SCOPES = [
     'https://www.googleapis.com/auth/calendar.readonly'
 ];
 
-const LIST_FORMAT_DATETIME = 'YYYY-MM-DD HH:mm';
-const LIST_FORMAT_DATE = 'YYYY-MM-DD [(All)]';
-const showId = false;
+const INSERT_DATE_FORMAT = 'YYYY-MM-DD';
+const INSERT_DATETIME_FORMAT = 'YYYY-MM-DDTHH:mm:ss.SSSZ';
 
 export const getCalendarClient = async () => {
     const oauth2Client = await authorize(SCOPES);
@@ -72,6 +72,53 @@ export const listEvents = async (calendarClient, calendarId = 'primary', options
         return gCalEvents;
     } catch (e) {
         error(`calendarId(${calendarId}) has error`, e);
+        throw e;
+    }
+}
+
+export interface InsertEventOptions {
+    summary: string
+    start: Date
+    end: Date
+    isAllDay?: boolean
+}
+
+export const insertEvent = (calendarClient: any) => (options: InsertEventOptions) => async (calendarId: string = 'primary') => {
+    const { summary, start, end, isAllDay } = options;
+    let event: any = {
+        summary: summary,
+    }
+    if (isAllDay) {
+        event = {
+            ...event,
+            start: {
+                date: format(start, INSERT_DATE_FORMAT),
+            },
+            end: {
+                date: format(end, INSERT_DATE_FORMAT),
+            }
+        }
+    } else {
+        event = {
+            ...event,
+            start: {
+                dateTime: format(start, INSERT_DATETIME_FORMAT),
+            },
+            end: {
+                dateTime: format(end, INSERT_DATETIME_FORMAT),
+            }
+        }
+    }
+    let params: any = {
+        calendarId: calendarId,
+        resource: event,
+    }
+    try {
+        const insertedEvent = await promisify<any, any>(calendarClient.events.insert)(params);
+        const gCalEvents = GCalEvent.gen(insertedEvent);
+        return gCalEvents;
+    } catch (e) {
+        error(`calendarId(${calendarId}) insert event error occured`, e);
         throw e;
     }
 }
