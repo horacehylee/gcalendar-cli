@@ -13,9 +13,9 @@ chai.use(sinonChai);
 chai.use(shallowDeepEqual);
 chai.use(chaiAsPromised);
 
-import * as googleCalendar from './../src/modules/google-calendar/google-calendar';
-import { GCalEvent } from './../src/modules/google-calendar/models/event';
-import { renderEventsList } from './../src/modules/google-calendar/renderer/cli-renderer';
+import * as googleCalendar from '../google-calendar';
+import { GCalEvent } from '../models/event';
+import { renderEventsList } from '../renderer/cli-renderer';
 import { flatten } from 'lodash';
 import * as parse from 'date-fns/parse';
 

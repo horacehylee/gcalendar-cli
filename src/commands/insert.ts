@@ -66,9 +66,20 @@ export const InsertCommand: CommandModule = {
             describe: 'Duration of the event',
             type: 'number',
         },
+        calendar: {
+            alias: 'c',
+            describe: 'Calendar for event to insert',
+            type: 'string',
+        }
     },
     handler: async (argv) => {
-        const { info, duration } = argv;
+        let { info, duration, calendar } = argv;
+
+        // check calendar exists
+        if (!calendar) {
+            calendar = 'primary';
+        }
+
         const options = parseInsertCommand(info, duration);
         log(pretty(ppObjDate({
             ...options,
@@ -78,7 +89,7 @@ export const InsertCommand: CommandModule = {
             type: 'confirm',
             name: 'confirm',
             default: false,
-            message: 'Are you sure to insert this in calendar?',
+            message: `Are you sure to insert this event into calendar?`,
         }
         const { confirm } = await inquirer.prompt(question);
         if (!confirm) {
@@ -91,6 +102,8 @@ export const InsertCommand: CommandModule = {
             end: options.end,
             isAllDay: options.isAllDay,
             summary: options.title,
-        })()
+        })(calendar)
+
+        log('Event is inserted')
     }
 }
