@@ -5,6 +5,7 @@ import * as format from 'date-fns/format';
 import * as Table from 'cli-table2';
 import { default as chalk } from 'chalk';
 import * as emoji from 'node-emoji';
+import * as isSameDay from 'date-fns/is_same_day';
 
 const log = console.log;
 const DATE_FORMAT = 'MMM D (ddd)';
@@ -22,14 +23,19 @@ const _renderEvents = (options: RenderEventOptions) => (gCalEvents: GCalEvent[])
         return;
     }
 
+    const today = new Date();
+
     const gCalEventDict = groupAndSort(gCalEvents);
     for (const [key, gCalEvents] of Object.entries(gCalEventDict)) {
         const date = parse(key);
-        const dateString = format(date, DATE_FORMAT);
-
+        let dateString = format(date, DATE_FORMAT);
+        if (isSameDay(today, date)) {
+            dateString += '\n(Today)';
+        }
         table.push(
             options.renderDateHeader(dateString),
         );
+        
         for (const gCalEvent of gCalEvents) {
             let timeRange = '';
             if (gCalEvent.allDay) {

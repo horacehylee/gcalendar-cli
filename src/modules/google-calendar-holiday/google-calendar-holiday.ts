@@ -1,3 +1,11 @@
+import * as isSaturday from 'date-fns/is_saturday';
+import * as isSunday from 'date-fns/is_sunday';
+import * as isSameDay from 'date-fns/is_same_day';
+import { flatten, find } from 'lodash';
+
+import { listEvents } from '../google-calendar/google-calendar';
+import { GCalEvent } from '../google-calendar/models/event';
+
 const HOLIDAY_REGEX = new RegExp('(#holiday@group.v.calendar.google.com)$', 'g');
 
 export const verifyCalendarUrl = (url: string) => {
@@ -9,19 +17,31 @@ export const verifyCalendarUrl = (url: string) => {
 export class HolidayCalendar {
 
     calendarUrls: string[];
+    holidays: Holiday[] = [];
 
     constructor(calendarUrls: string[]) {
         calendarUrls.forEach(verifyCalendarUrl);
         this.calendarUrls = calendarUrls;
     }
 
-    prefetchRange(from: Date, to: Date) {
-
+    async prefetchRange(calendarClient: any, from: Date, to: Date) {
+        const listEventPromises = this.calendarUrls.map((calendarId) => listEvents(calendarClient, calendarId, {
+            timeMin: from,
+            timeMax: to,
+        }));
+        const eventPromiseResponses = await Promise.all(listEventPromises);
+        const gCalEvents = flatten(eventPromiseResponses);
+        const fetchedHolidays = gCalEvents.map(Holiday.gen);
+        this.holidays = this.holidays.concat(fetchedHolidays);
     }
 
-
-
     isHoliday(date: Date): boolean {
+        if (isSaturday(date) || isSunday(date)) {
+            return true;
+        }
+        if (find(this.holidays, (holiday) => isSameDay(holiday.date, date))) {
+            return true;
+        }
         return false;
     }
 }
@@ -31,4 +51,13 @@ export class Holiday {
     date: Date
     calendarUrl: string
     calendarName: string
+
+    public static gen(gCalEvent: GCalEvent): Holiday {
+        const holiday = new Holiday();
+        holiday.name = gCalEvent.summary;
+        holiday.date = gCalEvent.date;
+        holiday.calendarUrl = gCalEvent.calendarId;
+        holiday.calendarName = gCalEvent.calendarDisplayName;
+        return holiday;
+    }
 }

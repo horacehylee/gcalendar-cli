@@ -13,7 +13,7 @@ import * as setMinutes from 'date-fns/set_minutes';
 import * as setSeconds from 'date-fns/set_seconds';
 import * as setMilliseconds from 'date-fns/set_milliseconds';
 
-import { resetTime } from '../modules/google-calendar/fns/util.fns';
+import { resetTime, toDisplayDateTime } from '../modules/google-calendar/fns/util.fns';
 import { filterWithRange } from '../modules/google-calendar/fns/event.fns';
 
 const log = console.log;
@@ -62,20 +62,17 @@ export const ListCommand: CommandModule = {
             from: fromDate,
             to: toDate ? toDate : resetTime(addDays(fromDate, dayOffset)),
         }
-        log(pretty(options));
+        log(pretty({
+            from: toDisplayDateTime(options.from),
+            to: toDisplayDateTime(options.to),
+        }));
 
         const client = await getCalendarClient();
-        // let calendars = await listCalendars(client);
-        // const listEventPromises = calendars.map((calendar) => listEvents(client, calendar.id, {
-        //     timeMin: options.from,
-        //     timeMax: options.to,
-        // }));
-        const listEventPromises = [
-            listEvents(client, 'primary', {
-                timeMin: options.from,
-                timeMax: options.to,
-            })
-        ]
+        let calendars = await listCalendars(client);
+        const listEventPromises = calendars.map((calendar) => listEvents(client, calendar.id, {
+            timeMin: options.from,
+            timeMax: options.to,
+        }));
         const eventPromiseResponses = await Promise.all(listEventPromises);
         let gCalEvents = flatten(eventPromiseResponses);
         gCalEvents = filterWithRange(options.from, options.to)(gCalEvents);
