@@ -1,6 +1,6 @@
 {
   "name": "gcalendar-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Google Calendar cli tool for Node.js",
   "main": "./build/main.js",
   "scripts": {
