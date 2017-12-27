@@ -2,6 +2,8 @@
 
 > Google Calendar cli tool for Node.js
 
+[![npm version](https://badge.fury.io/js/gcalendar-cli.svg)](https://badge.fury.io/js/gcalendar-cli)
+
 ## Installation
 
 Install it as a global module
