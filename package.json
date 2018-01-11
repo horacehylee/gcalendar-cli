@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "coverage": "jest --coverage",
+    "coverage:publish": "type .\\coverage\\lcov.info | coveralls",
     "start": "npm run build && node ./build/main.js",
     "build": "backpack build"
   },

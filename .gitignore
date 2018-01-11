@@ -1,3 +1,6 @@
+# Coveralls
+.coveralls.yml
+
 # Builds
 build/
 
