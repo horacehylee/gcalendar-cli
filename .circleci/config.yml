@@ -37,3 +37,6 @@ jobs:
         
       # run tests!
       - run: yarn test
+
+      # run coverage and publish
+      - run: yarn coverage && yarn coverage:publish:linux
