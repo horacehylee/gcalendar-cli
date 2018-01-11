@@ -21,6 +21,7 @@ import {
 import { GCalEvent } from "../models/event";
 import * as parse from "date-fns/parse";
 
+// TODO: need to cater for other timezones
 // import * as timezone_mock from "timezone-mock";
 // timezone_mock.register("UTC");
 
@@ -31,7 +32,7 @@ describe("Event fns", () => {
       parse("2017-12-27T16:00:00.000Z")
     );
 
-    describe.only("Events", () => {
+    describe("Events", () => {
       it("should filter event ended", () => {
         const gCalEvents: GCalEvent[] = [
           {
