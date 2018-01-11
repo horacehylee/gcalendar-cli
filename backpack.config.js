@@ -19,7 +19,7 @@ module.exports = {
       // },
       {
         test: /^(?!.*\.spec\.ts$).*\.ts$/,
-        loader: 'awesome-typescript-loader',
+        loader: 'ts-loader',
       }
     );
 

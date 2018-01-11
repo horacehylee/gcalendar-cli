@@ -38,7 +38,7 @@ const _renderEvents = (options: RenderEventOptions) => (
     if (isSameDay(today, date)) {
       dateString += "\n(Today)";
     }
-    if (checkHoliday(date)) {
+    if (checkHoliday && checkHoliday(date)) {
       dateString = chalk.redBright(dateString);
     }
     table.push(renderDateHeader(dateString));
@@ -66,6 +66,9 @@ const _renderEvents = (options: RenderEventOptions) => (
 const checkWithHolidayCalendar = (holidayCalendar: HolidayCalendar) => (
   date: Date
 ): boolean => {
+  if (!holidayCalendar) {
+    return false;
+  }
   return holidayCalendar.isHoliday(date);
 };
 
