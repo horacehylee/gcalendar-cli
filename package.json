@@ -13,10 +13,18 @@
   "bin": {
     "gcal": "./build/main.js"
   },
-  "keywords": ["gcal", "google", "calendar", "cli", "google-calendar"],
+  "keywords": [
+    "gcal",
+    "google",
+    "calendar",
+    "cli",
+    "google-calendar"
+  ],
   "author": "Horace Lee",
   "license": "ISC",
-  "files": ["build"],
+  "files": [
+    "build"
+  ],
   "dependencies": {
     "axios": "0.17.1",
     "bluebird": "3.5.1",
@@ -71,6 +79,7 @@
     "sinon-chai": "2.14.0",
     "supertest": "3.0.0",
     "supertest-chai": "0.0.8",
+    "timezone-mock": "^0.0.7",
     "ts-jest": "^22.0.1",
     "ts-loader": "^3.2.0",
     "ts-mocha": "1.0.3",
@@ -81,8 +90,17 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "transformIgnorePatterns": ["node_modules/(?!googleapis)"],
+    "transformIgnorePatterns": [
+      "node_modules/(?!googleapis)"
+    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
