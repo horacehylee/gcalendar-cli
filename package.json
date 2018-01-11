@@ -4,7 +4,7 @@
   "description": "Google Calendar cli tool for Node.js",
   "main": "./build/main.js",
   "scripts": {
-    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "test": "mocha -r ts-node/register ./**/*.spec.ts",
     "coverage": "jest --coverage",
     "coverage:publish": "type .\\coverage\\lcov.info | coveralls",
     "start": "npm run build && node ./build/main.js",
