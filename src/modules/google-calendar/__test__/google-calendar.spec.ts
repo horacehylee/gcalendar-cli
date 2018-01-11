@@ -19,7 +19,7 @@ import { renderEventsList } from '../renderer/cli-renderer';
 import { flatten } from 'lodash';
 import * as parse from 'date-fns/parse';
 
-describe('Google Calendar', () => {
+describe.skip('Google Calendar', () => {
 
     describe('Get Client', () => {
         it('should return google calendar client', async () => {
