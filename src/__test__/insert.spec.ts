@@ -29,8 +29,8 @@ describe('Parse Insert Command', () => {
             const result = parseInsertCommand('movie from 28 Dec 2017');
             expect(result).to.deep.equal({
                 title: "Movie",
-                start: parse('2017-12-27T16:00:00.000Z'),
-                end: parse('2017-12-28T16:00:00.000Z'),
+                start: parse('2017-12-28T00:00.000'),
+                end: parse('2017-12-29T00:00.000'),
                 isAllDay: true,
             })
         })
@@ -39,8 +39,8 @@ describe('Parse Insert Command', () => {
             const result = parseInsertCommand('movie from 28 Dec 2017 2pm');
             expect(result).to.deep.equal({
                 title: "Movie",
-                start: parse('2017-12-28T06:00:00.000Z'),
-                end: parse('2017-12-28T07:00:00.000Z'),
+                start: parse('2017-12-28T14:00:00.000'),
+                end: parse('2017-12-28T15:00:00.000'),
                 isAllDay: false,
             })
         })
@@ -49,8 +49,8 @@ describe('Parse Insert Command', () => {
             const result = parseInsertCommand('movie from 28 Dec 2017 to 30 Dec 2017');
             expect(result).to.deep.equal({
                 title: "Movie",
-                start: parse('2017-12-27T16:00:00.000Z'),
-                end: parse('2017-12-30T16:00:00.000Z'),
+                start: parse('2017-12-28T00:00:00.000'),
+                end: parse('2017-12-31T00:00:00.000'),
                 isAllDay: true,
             })
         })
@@ -79,8 +79,8 @@ describe('Parse Insert Command', () => {
             const result = parseInsertCommand('movie from 28 Dec 2017', 3);
             expect(result).to.deep.equal({
                 title: "Movie",
-                start: parse('2017-12-27T16:00:00.000Z'),
-                end: parse('2017-12-28T16:00:00.000Z'),
+                start: parse('2017-12-28T00:00:00.000'),
+                end: parse('2017-12-29T00:00:00.000'),
                 isAllDay: true,
             })
         })
@@ -89,8 +89,8 @@ describe('Parse Insert Command', () => {
             const result = parseInsertCommand('movie from 28 Dec 2017 2pm', 3);
             expect(result).to.deep.equal({
                 title: "Movie",
-                start: parse('2017-12-28T06:00:00.000Z'),
-                end: parse('2017-12-28T09:00:00.000Z'),
+                start: parse('2017-12-28T14:00:00.000'),
+                end: parse('2017-12-28T17:00:00.000'),
                 isAllDay: false,
             })
         })
