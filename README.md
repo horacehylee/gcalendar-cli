@@ -3,6 +3,7 @@
 > Google Calendar cli tool for Node.js
 
 [![npm version](https://badge.fury.io/js/gcalendar-cli.svg)](https://badge.fury.io/js/gcalendar-cli)
+[![CircleCI](https://circleci.com/gh/horacehylee/gcalendar-cli.svg?style=svg)](https://circleci.com/gh/horacehylee/gcalendar-cli)
 [![Coverage Status](https://coveralls.io/repos/github/horacehylee/gcalendar-cli/badge.svg?branch=master)](https://coveralls.io/github/horacehylee/gcalendar-cli?branch=master)
 
 ## Installation
