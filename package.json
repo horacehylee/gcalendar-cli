@@ -6,8 +6,7 @@
   "scripts": {
     "test": "mocha -r ts-node/register ./**/*.spec.ts",
     "coverage": "jest --coverage",
-    "coverage:publish": "type ./coverage/lcov.info | coveralls",
-    "coverage:publish:linux": "cat ./coverage/lcov.info | coveralls",
+    "coverage:publish": "shx cat ./coverage/lcov.info | coveralls",
     "start": "npm run build && node ./build/main.js",
     "build": "backpack build"
   },
@@ -76,6 +75,7 @@
     "jest": "22",
     "lodash-ts-imports-loader": "1.1.2",
     "mocha": "3.5.3",
+    "shx": "^0.2.2",
     "sinon": "4.1.2",
     "sinon-chai": "2.14.0",
     "supertest": "3.0.0",
