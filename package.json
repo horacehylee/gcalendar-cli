@@ -13,18 +13,14 @@
   "bin": {
     "gcal": "./build/main.js"
   },
-  "keywords": [
-    "gcal",
-    "google",
-    "calendar",
-    "cli",
-    "google-calendar"
-  ],
+  "keywords": ["gcal", "google", "calendar", "cli", "google-calendar"],
   "author": "Horace Lee",
   "license": "ISC",
-  "files": [
-    "build"
-  ],
+  "files": ["build"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/horacehylee/gcalendar-cli.git"
+  },
   "dependencies": {
     "axios": "0.17.1",
     "bluebird": "3.5.1",
@@ -91,17 +87,8 @@
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "transformIgnorePatterns": [
-      "node_modules/(?!googleapis)"
-    ],
+    "transformIgnorePatterns": ["node_modules/(?!googleapis)"],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"]
   }
 }
