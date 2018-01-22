@@ -8,7 +8,8 @@
     "coverage": "jest --coverage",
     "coverage:publish": "shx cat ./coverage/lcov.info | coveralls",
     "start": "npm run build && node ./build/main.js",
-    "build": "backpack build"
+    "build": "backpack build",
+    "prepublish": "yarn build"
   },
   "bin": {
     "gcal": "./build/main.js"
