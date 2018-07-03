@@ -1402,7 +1402,7 @@ cli-spinners@^1.0.0:
 
 cli-table3@0.5.0:
   version "0.5.0"
-  resolved "http://localhost:4873/cli-table3/-/cli-table3-0.5.0.tgz#adb2f025715f4466e67629783c8d73e9030eb4bd"
+  resolved "https://registry.yarnpkg.com/cli-table3/-/cli-table3-0.5.0.tgz#adb2f025715f4466e67629783c8d73e9030eb4bd"
   dependencies:
     object-assign "^4.1.0"
     string-width "^2.1.1"
