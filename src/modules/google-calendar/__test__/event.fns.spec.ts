@@ -1,17 +1,4 @@
-process.env.NODE_ENV = "test";
-import "mocha";
-import { assert, expect, should } from "chai";
-should();
-import * as sinon from "sinon";
-import { SinonStub } from "sinon";
 
-import * as chai from "chai";
-import * as sinonChai from "sinon-chai";
-import * as shallowDeepEqual from "chai-shallow-deep-equal";
-import * as chaiAsPromised from "chai-as-promised";
-chai.use(sinonChai);
-chai.use(shallowDeepEqual);
-chai.use(chaiAsPromised);
 
 import {
   groupAcrossDays,
@@ -45,7 +32,7 @@ describe("Event fns", () => {
           }
         ];
         const filtered = filter(gCalEvents);
-        expect(filtered).to.deep.equal([]);
+        expect(filtered).toEqual([]);
       });
 
       it("should filter event ended with only endTime", () => {
@@ -59,7 +46,7 @@ describe("Event fns", () => {
           }
         ];
         const filtered = filter(gCalEvents);
-        expect(filtered).to.deep.equal([]);
+        expect(filtered).toEqual([]);
       });
 
       it("should filter event with date before from", () => {
@@ -73,7 +60,7 @@ describe("Event fns", () => {
           }
         ];
         const filtered = filter(gCalEvents);
-        expect(filtered).to.deep.equal([]);
+        expect(filtered).toEqual([]);
       });
 
       it("should not filter event with date edging to", () => {
@@ -87,7 +74,7 @@ describe("Event fns", () => {
           }
         ];
         const filtered = filter(gCalEvents);
-        expect(filtered).to.deep.equal([]);
+        expect(filtered).toEqual([]);
       });
 
       it("should not filter event that have startTime only", () => {
@@ -101,7 +88,7 @@ describe("Event fns", () => {
           }
         ];
         const filtered = filter(gCalEvents);
-        expect(filtered).to.deep.equal([
+        expect(filtered).toEqual([
           {
             summary: "StartTime only",
             calendarId: "abc@gmail.com",
@@ -124,7 +111,7 @@ describe("Event fns", () => {
           }
         ];
         const filtered = filter(gCalEvents);
-        expect(filtered).to.deep.equal([
+        expect(filtered).toEqual([
           {
             summary: "Not started",
             calendarId: "abc@gmail.com",
@@ -148,7 +135,7 @@ describe("Event fns", () => {
           }
         ];
         const filtered = filter(gCalEvents);
-        expect(filtered).to.deep.equal([
+        expect(filtered).toEqual([
           {
             summary: "Started but not ended",
             calendarId: "abc@gmail.com",
@@ -172,7 +159,7 @@ describe("Event fns", () => {
           }
         ];
         const filtered = filter(gCalEvents);
-        expect(filtered).to.deep.equal([
+        expect(filtered).toEqual([
           {
             summary: "In the middle",
             calendarId: "abc@gmail.com",
@@ -245,7 +232,7 @@ describe("Event fns", () => {
           parse("2017-12-26T13:40:07.361Z"),
           parse("2017-12-27T16:00:00.000Z")
         )(gCalEventss);
-        expect(filtered).to.be.deep.equal([
+        expect(filtered).toEqual([
           {
             summary: "In the middle",
             calendarId: "abc@gmail.com",
@@ -290,7 +277,7 @@ describe("Event fns", () => {
           parse("2017-12-26T13:40:07.361Z"),
           parse("2017-12-26T16:00:00.000Z")
         )(gCalEventss);
-        expect(filtered).to.be.deep.equal([
+        expect(filtered).toEqual([
           {
             summary: "In the middle",
             calendarId: "abc@gmail.com",
@@ -345,7 +332,7 @@ describe("Event fns", () => {
         }
       ];
       const sorted = sortWithinDay(gCalEvents);
-      expect(sorted).to.deep.equal([
+      expect(sorted).toEqual([
         {
           summary: "Single timed event",
           calendarId: "unknownorganizer@calendar.google.com",
@@ -384,7 +371,7 @@ describe("Event fns", () => {
         }
       ];
       const sorted = sortWithinDay(gCalEvents);
-      expect(sorted).to.deep.equal([
+      expect(sorted).toEqual([
         {
           summary: "Single timed event",
           calendarId: "unknownorganizer@calendar.google.com",
@@ -423,7 +410,7 @@ describe("Event fns", () => {
         }
       ];
       const sorted = sortWithinDay(gCalEvents);
-      expect(sorted).to.deep.equal([
+      expect(sorted).toEqual([
         {
           summary: "Something",
           calendarId: "unknownorganizer@calendar.google.com",
@@ -483,7 +470,7 @@ describe("Event fns", () => {
         }
       ];
       const gCalEventDict = groupAcrossDays(gCalEvents);
-      expect(gCalEventDict).to.be.deep.equal({
+      expect(gCalEventDict).toEqual({
         "2018-01-20T16:00:00.000Z": [
           {
             summary: "2018 (Day 1/3)",

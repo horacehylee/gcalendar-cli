@@ -1,4 +1,4 @@
-import * as google from "googleapis";
+const google = require("googleapis");
 import { authorize } from "../google-oauth2/google-oauth2";
 import { promisify } from "bluebird";
 import { default as chalk } from "chalk";
