@@ -2,7 +2,7 @@ import { GCalEvent } from "../models/event";
 import { groupAndSort } from "./../fns/event.fns";
 import * as parse from "date-fns/parse";
 import * as format from "date-fns/format";
-import * as Table from "cli-table2";
+import * as Table from "cli-table3";
 import { default as chalk } from "chalk";
 import * as emoji from "node-emoji";
 import * as isSameDay from "date-fns/is_same_day";
