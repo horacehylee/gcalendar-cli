@@ -1,5 +1,3 @@
-
-
 import * as parse from "date-fns/parse";
 import {
   renderEventsList,

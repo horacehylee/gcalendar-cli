@@ -1,5 +1,3 @@
-
-
 import { GCalEvent } from "../models/event";
 import * as parse from "date-fns/parse";
 

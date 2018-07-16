@@ -4,11 +4,11 @@ import { InsertCommand } from "./insert";
 import { SetupCommand } from "./setup";
 
 export const registerCommands = (argv: Argv) => {
-    argv.command(SetupCommand)
-    argv.command(ListCommand)
-    argv.command(InsertCommand)
-    return argv;
-}
+  argv.command(SetupCommand);
+  argv.command(ListCommand);
+  argv.command(InsertCommand);
+  return argv;
+};
 
 export const log = console.log;
-export const pretty = (obj) => JSON.stringify(obj, null, 2);
+export const pretty = obj => JSON.stringify(obj, null, 2);
