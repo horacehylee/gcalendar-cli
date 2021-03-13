@@ -1,14 +1,14 @@
-import * as setHours from "date-fns/set_hours";
-import * as setMinutes from "date-fns/set_minutes";
-import * as setSeconds from "date-fns/set_seconds";
-import * as setMilliseconds from "date-fns/set_milliseconds";
-import * as format from "date-fns/format";
-import * as differenceInSeconds from "date-fns/difference_in_seconds";
+import setHours from "date-fns/set_hours";
+import setMinutes from "date-fns/set_minutes";
+import setSeconds from "date-fns/set_seconds";
+import setMilliseconds from "date-fns/set_milliseconds";
+import format from "date-fns/format";
+import differenceInSeconds from "date-fns/difference_in_seconds";
 
 export const resetTime = (date: Date) =>
   setMilliseconds(setHours(setMinutes(setSeconds(date, 0), 0), 0), 0);
 
-const formatDate = (formatString: string) => obj => {
+const formatDate = (formatString: string) => (obj) => {
   const objClone = { ...obj };
   for (const [key, value] of Object.entries(objClone)) {
     if (value instanceof Date) {

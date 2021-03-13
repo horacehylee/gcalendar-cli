@@ -1,11 +1,11 @@
 import { GCalEvent } from "../models/event";
 import { groupAndSort } from "./../fns/event.fns";
-import * as parse from "date-fns/parse";
-import * as format from "date-fns/format";
-import * as Table from "cli-table3";
+import parse from "date-fns/parse";
+import format from "date-fns/format";
+import Table from "cli-table3";
 import { default as chalk } from "chalk";
-import * as emoji from "node-emoji";
-import * as isSameDay from "date-fns/is_same_day";
+import emoji from "node-emoji";
+import isSameDay from "date-fns/is_same_day";
 import { HolidayCalendar } from "../../google-calendar-holiday/google-calendar-holiday";
 
 const log = console.log;
@@ -74,30 +74,30 @@ const checkWithHolidayCalendar = (holidayCalendar: HolidayCalendar) => (
 
 export const renderEventsList = (holidayCalendar: HolidayCalendar) =>
   _renderEvents({
-    renderDateHeader: dateString => {
+    renderDateHeader: (dateString) => {
       return [{ colSpan: 3, content: dateString, hAlign: "center" }];
     },
     renderEventItem: (gCalEvent, timeRange) => {
       return [
         timeRange,
         gCalEvent.calendarDisplayName,
-        chalk.bold(gCalEvent.summary)
+        chalk.bold(gCalEvent.summary),
       ];
     },
-    checkHoliday: checkWithHolidayCalendar(holidayCalendar)
+    checkHoliday: checkWithHolidayCalendar(holidayCalendar),
   });
 
 export const renderEventsTable = (holidayCalendar: HolidayCalendar) =>
   _renderEvents({
-    renderDateHeader: dateString => {
+    renderDateHeader: (dateString) => {
       return [{ colSpan: 1, content: dateString, hAlign: "center" }];
     },
     renderEventItem: (gCalEvent, timeRange) => {
       return [
         `${chalk.bold(gCalEvent.summary)}\n${timeRange}\n${
           gCalEvent.calendarDisplayName
-        }`
+        }`,
       ];
     },
-    checkHoliday: checkWithHolidayCalendar(holidayCalendar)
+    checkHoliday: checkWithHolidayCalendar(holidayCalendar),
   });

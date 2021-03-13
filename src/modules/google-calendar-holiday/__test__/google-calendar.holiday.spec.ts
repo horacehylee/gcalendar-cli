@@ -1,9 +1,9 @@
 import {
   verifyCalendarUrl,
-  HolidayCalendar
+  HolidayCalendar,
 } from "./../google-calendar-holiday";
 import { getCalendarClient } from "../../google-calendar/google-calendar";
-import * as parse from "date-fns/parse";
+import parse from "date-fns/parse";
 
 describe.skip("Verify Calendar Url", () => {
   it("should pass example calendar url", () => {

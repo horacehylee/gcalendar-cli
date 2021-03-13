@@ -1,5 +1,5 @@
 import { GCalEvent } from "../models/event";
-import * as parse from "date-fns/parse";
+import parse from "date-fns/parse";
 
 describe("GCalEvent gen", () => {
   describe("All day event", () => {
@@ -9,18 +9,18 @@ describe("GCalEvent gen", () => {
         creator: {
           email: "abc@gmail.com",
           displayName: "ABC",
-          self: true
+          self: true,
         },
         organizer: {
           email: "unknownorganizer@calendar.google.com",
-          displayName: "Unknown Organizer"
+          displayName: "Unknown Organizer",
         },
         start: {
-          date: "2018-01-21"
+          date: "2018-01-21",
         },
         end: {
-          date: "2018-01-24"
-        }
+          date: "2018-01-24",
+        },
       };
       const gCalEvents = GCalEvent.gen(event);
       expect(gCalEvents).toEqual([
@@ -29,22 +29,22 @@ describe("GCalEvent gen", () => {
           calendarId: "unknownorganizer@calendar.google.com",
           calendarDisplayName: "Unknown Organizer",
           allDay: true,
-          date: parse("2018-01-21")
+          date: parse("2018-01-21"),
         },
         {
           summary: "2018 (Day 2/3)",
           calendarId: "unknownorganizer@calendar.google.com",
           calendarDisplayName: "Unknown Organizer",
           allDay: true,
-          date: parse("2018-01-22")
+          date: parse("2018-01-22"),
         },
         {
           summary: "2018 (Day 3/3)",
           calendarId: "unknownorganizer@calendar.google.com",
           calendarDisplayName: "Unknown Organizer",
           allDay: true,
-          date: parse("2018-01-23")
-        }
+          date: parse("2018-01-23"),
+        },
       ]);
     });
 
@@ -54,14 +54,14 @@ describe("GCalEvent gen", () => {
         organizer: {
           email: "abc@gmail.com",
           displayName: "ABC",
-          self: true
+          self: true,
         },
         start: {
-          date: "2017-12-24"
+          date: "2017-12-24",
         },
         end: {
-          date: "2017-12-25"
-        }
+          date: "2017-12-25",
+        },
       };
       const gCalEvents = GCalEvent.gen(event);
       expect(gCalEvents).toEqual([
@@ -70,8 +70,8 @@ describe("GCalEvent gen", () => {
           calendarId: "abc@gmail.com",
           calendarDisplayName: "ABC",
           allDay: true,
-          date: parse("2017-12-24")
-        }
+          date: parse("2017-12-24"),
+        },
       ]);
     });
   });
@@ -82,14 +82,14 @@ describe("GCalEvent gen", () => {
         summary: "Multiple days event with time",
         organizer: {
           email: "unknownorganizer@calendar.google.com",
-          displayName: "Google Calendar"
+          displayName: "Google Calendar",
         },
         start: {
-          dateTime: "2017-12-27T18:30:00+08:00"
+          dateTime: "2017-12-27T18:30:00+08:00",
         },
         end: {
-          dateTime: "2017-12-29T19:00:00+08:00"
-        }
+          dateTime: "2017-12-29T19:00:00+08:00",
+        },
       };
       const gCalEvents = GCalEvent.gen(event);
       expect(gCalEvents).toEqual([
@@ -98,22 +98,22 @@ describe("GCalEvent gen", () => {
           calendarId: "unknownorganizer@calendar.google.com",
           calendarDisplayName: "Google Calendar",
           date: parse("2017-12-27"),
-          startTime: parse("2017-12-27T18:30:00+08:00")
+          startTime: parse("2017-12-27T18:30:00+08:00"),
         },
         {
           summary: "Multiple days event with time (Day 2/3)",
           calendarId: "unknownorganizer@calendar.google.com",
           calendarDisplayName: "Google Calendar",
           allDay: true,
-          date: parse("2017-12-28")
+          date: parse("2017-12-28"),
         },
         {
           summary: "Multiple days event with time (Day 3/3)",
           calendarId: "unknownorganizer@calendar.google.com",
           calendarDisplayName: "Google Calendar",
           date: parse("2017-12-29"),
-          endTime: parse("2017-12-29T19:00:00+08:00")
-        }
+          endTime: parse("2017-12-29T19:00:00+08:00"),
+        },
       ]);
     });
 
@@ -122,14 +122,14 @@ describe("GCalEvent gen", () => {
         summary: "Single timed event",
         organizer: {
           email: "unknownorganizer@calendar.google.com",
-          displayName: "Google Calendar"
+          displayName: "Google Calendar",
         },
         start: {
-          dateTime: "2017-12-27T18:30:00+08:00"
+          dateTime: "2017-12-27T18:30:00+08:00",
         },
         end: {
-          dateTime: "2017-12-27T19:00:00+08:00"
-        }
+          dateTime: "2017-12-27T19:00:00+08:00",
+        },
       };
       const gCalEvents = GCalEvent.gen(event);
       expect(gCalEvents).toEqual([
@@ -139,8 +139,8 @@ describe("GCalEvent gen", () => {
           calendarDisplayName: "Google Calendar",
           startTime: parse("2017-12-27T18:30:00+08:00"),
           endTime: parse("2017-12-27T19:00:00+08:00"),
-          date: parse("2017-12-27")
-        }
+          date: parse("2017-12-27"),
+        },
       ]);
     });
   });

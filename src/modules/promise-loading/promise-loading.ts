@@ -1,4 +1,4 @@
-import * as Ora from "ora";
+import Ora from "ora";
 import { defaults } from "lodash";
 
 export interface PromiseMiddleWareOptions {
@@ -14,11 +14,11 @@ export const promiseMiddleware = (
   return <T>(promiseIn: Promise<T>) => {
     before();
     return promiseIn
-      .then(res => {
+      .then((res) => {
         success(res);
         return Promise.resolve(res);
       })
-      .catch(err => {
+      .catch((err) => {
         failed(err);
         return Promise.reject(err);
       });
@@ -34,7 +34,7 @@ export interface PromiseLoadingOptions {
 const DEFAULT_LOADING_OPTIONS: PromiseLoadingOptions = {
   message: "Loading",
   spinner: "shark",
-  color: "white"
+  color: "white",
 };
 
 export const loading = (options?: PromiseLoadingOptions) =>
@@ -46,14 +46,14 @@ export const loading = (options?: PromiseLoadingOptions) =>
         spinner = new Ora({
           text: options.message,
           spinner: <any>options.spinner,
-          color: <any>options.color
+          color: <any>options.color,
         }).start();
       },
-      success: res => {
+      success: (res) => {
         spinner.succeed();
       },
-      failed: err => {
+      failed: (err) => {
         spinner.fail();
-      }
+      },
     };
   });

@@ -1,6 +1,6 @@
-import * as isSaturday from "date-fns/is_saturday";
-import * as isSunday from "date-fns/is_sunday";
-import * as isSameDay from "date-fns/is_same_day";
+import isSaturday from "date-fns/is_saturday";
+import isSunday from "date-fns/is_sunday";
+import isSameDay from "date-fns/is_same_day";
 import { flatten, find } from "lodash";
 
 import { listEvents } from "../google-calendar/google-calendar";
@@ -15,7 +15,7 @@ export const verifyCalendarUrl = (url: string) => {
 };
 
 export const filterCalendarUrl = (urls: string[]): string[] => {
-  return urls.filter(url => HOLIDAY_REGEX.test(url));
+  return urls.filter((url) => HOLIDAY_REGEX.test(url));
 };
 
 export class HolidayCalendar {
@@ -23,15 +23,15 @@ export class HolidayCalendar {
   holidays: Holiday[] = [];
 
   constructor(calendarUrls: string[]) {
-    calendarUrls.forEach(url => verifyCalendarUrl(url));
+    calendarUrls.forEach((url) => verifyCalendarUrl(url));
     this.calendarUrls = calendarUrls;
   }
 
   async prefetchRange(calendarClient: any, from: Date, to: Date) {
-    const listEventPromises = this.calendarUrls.map(calendarId =>
+    const listEventPromises = this.calendarUrls.map((calendarId) =>
       listEvents(calendarClient, calendarId, {
         timeMin: from,
-        timeMax: to
+        timeMax: to,
       })
     );
     try {
@@ -49,7 +49,7 @@ export class HolidayCalendar {
     if (isSaturday(date) || isSunday(date)) {
       return true;
     }
-    if (find(this.holidays, holiday => isSameDay(holiday.date, date))) {
+    if (find(this.holidays, (holiday) => isSameDay(holiday.date, date))) {
       return true;
     }
     return false;

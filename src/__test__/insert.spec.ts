@@ -1,10 +1,10 @@
 import { parseInsertCommand } from "./../commands/insert";
-import * as parse from "date-fns/parse";
-import * as addDays from "date-fns/add_days";
-import * as setHours from "date-fns/set_hours";
-import * as setMinutes from "date-fns/set_minutes";
-import * as setSeconds from "date-fns/set_seconds";
-import * as setMilliseconds from "date-fns/set_milliseconds";
+import parse from "date-fns/parse";
+import addDays from "date-fns/add_days";
+import setHours from "date-fns/set_hours";
+import setMinutes from "date-fns/set_minutes";
+import setSeconds from "date-fns/set_seconds";
+import setMilliseconds from "date-fns/set_milliseconds";
 
 const resetTime = (date: Date) =>
   setMilliseconds(setHours(setMinutes(setSeconds(date, 0), 0), 0), 0);
@@ -17,7 +17,7 @@ describe("Parse Insert Command", () => {
         title: "Movie",
         start: parse("2017-12-28T00:00.000"),
         end: parse("2017-12-29T00:00.000"),
-        isAllDay: true
+        isAllDay: true,
       });
     });
 
@@ -27,7 +27,7 @@ describe("Parse Insert Command", () => {
         title: "Movie",
         start: parse("2017-12-28T14:00:00.000"),
         end: parse("2017-12-28T15:00:00.000"),
-        isAllDay: false
+        isAllDay: false,
       });
     });
 
@@ -39,7 +39,7 @@ describe("Parse Insert Command", () => {
         title: "Movie",
         start: parse("2017-12-28T00:00:00.000"),
         end: parse("2017-12-31T00:00:00.000"),
-        isAllDay: true
+        isAllDay: true,
       });
     });
 
@@ -49,7 +49,7 @@ describe("Parse Insert Command", () => {
         title: "Movie",
         start: resetTime(new Date()),
         end: resetTime(addDays(new Date(), 1)),
-        isAllDay: true
+        isAllDay: true,
       });
     });
 
@@ -59,7 +59,7 @@ describe("Parse Insert Command", () => {
         title: "Movie",
         start: resetTime(new Date()),
         end: resetTime(addDays(new Date(), 1)),
-        isAllDay: true
+        isAllDay: true,
       });
     });
 
@@ -69,7 +69,7 @@ describe("Parse Insert Command", () => {
         title: "Movie",
         start: parse("2017-12-28T00:00:00.000"),
         end: parse("2017-12-29T00:00:00.000"),
-        isAllDay: true
+        isAllDay: true,
       });
     });
 
@@ -79,7 +79,7 @@ describe("Parse Insert Command", () => {
         title: "Movie",
         start: parse("2017-12-28T14:00:00.000"),
         end: parse("2017-12-28T17:00:00.000"),
-        isAllDay: false
+        isAllDay: false,
       });
     });
   });

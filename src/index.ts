@@ -1,5 +1,5 @@
 const pkg = require("./../package.json");
-import * as updateNotifier from "update-notifier";
+import updateNotifier from "update-notifier";
 updateNotifier({ pkg: pkg }).notify();
 
 const scriptName = "gcal";
@@ -11,7 +11,7 @@ for (let i = 0; i <= INDEX_MAX; i++) {
   }
 }
 
-import * as yargs from "yargs";
+import yargs from "yargs";
 import { registerCommands } from "./commands";
 
 const argv = registerCommands(yargs);

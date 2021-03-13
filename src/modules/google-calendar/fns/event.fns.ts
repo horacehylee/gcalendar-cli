@@ -8,14 +8,14 @@ import {
   mapKeys,
   toPairs,
   fromPairs,
-  chain
+  chain,
 } from "lodash";
 import { resetTime } from "./util.fns";
-import * as addDays from "date-fns/add_days";
-import * as isBefore from "date-fns/is_before";
-import * as isAfter from "date-fns/is_after";
-import * as subMilliseconds from "date-fns/sub_milliseconds";
-import * as addMilliseconds from "date-fns/add_milliseconds";
+import addDays from "date-fns/add_days";
+import isBefore from "date-fns/is_before";
+import isAfter from "date-fns/is_after";
+import subMilliseconds from "date-fns/sub_milliseconds";
+import addMilliseconds from "date-fns/add_milliseconds";
 
 const maxMillis = 10 ** 8 * 24 * 60 * 60 * 1000;
 const maxDate = new Date(maxMillis);
@@ -32,7 +32,7 @@ const checkDateIsBeforeToDate = (to, date) => {
 export const filterWithRange = (from: Date, to: Date) => (
   gCalEvents: GCalEvent[]
 ): GCalEvent[] => {
-  return filter(gCalEvents, gCalEvent => {
+  return filter(gCalEvents, (gCalEvent) => {
     let valid =
       checkDateIsBeforeToDate(to, gCalEvent.date) &&
       checkDateIsAfterFromDate(from, gCalEvent.date);
@@ -60,7 +60,7 @@ export const sortWithinDay = (gCalEvent: GCalEvent[]): GCalEvent[] => {
     },
     (gCalEvent: GCalEvent) => {
       return gCalEvent.summary;
-    }
+    },
   ];
   return sortBy(gCalEvent, sorter);
 };
@@ -68,7 +68,9 @@ export const sortWithinDay = (gCalEvent: GCalEvent[]): GCalEvent[] => {
 export const groupAcrossDays = (
   gCalEvents: GCalEvent[]
 ): Dictionary<GCalEvent[]> => {
-  const groupedWithTimeKey = groupBy(gCalEvents, event => event.date.getTime());
+  const groupedWithTimeKey = groupBy(gCalEvents, (event) =>
+    event.date.getTime()
+  );
   const sortedWithTimeKey = sortObjKeys(groupedWithTimeKey);
   const grouped = mapKeys(sortedWithTimeKey, (_, timeString) =>
     new Date(+timeString).toISOString()
@@ -87,8 +89,5 @@ export const groupAndSort = (
 };
 
 const sortObjKeys = <T>(obj: T) => {
-  return (chain(obj).toPairs() as any)
-    .sortBy(0)
-    .fromPairs()
-    .value() as T;
+  return (chain(obj).toPairs() as any).sortBy(0).fromPairs().value() as T;
 };

@@ -1,11 +1,11 @@
-import * as isSameDay from "date-fns/is_same_day";
-import * as differenceInCalendarDays from "date-fns/difference_in_calendar_days";
-import * as differenceInDays from "date-fns/difference_in_days";
-import * as addDays from "date-fns/add_days";
-import * as parse from "date-fns/parse";
-import * as setHours from "date-fns/set_hours";
-import * as setMinutes from "date-fns/set_minutes";
-import * as setSeconds from "date-fns/set_seconds";
+import isSameDay from "date-fns/is_same_day";
+import differenceInCalendarDays from "date-fns/difference_in_calendar_days";
+import differenceInDays from "date-fns/difference_in_days";
+import addDays from "date-fns/add_days";
+import parse from "date-fns/parse";
+import setHours from "date-fns/set_hours";
+import setMinutes from "date-fns/set_minutes";
+import setSeconds from "date-fns/set_seconds";
 
 const isAllDay = (event: any) => event.start.date;
 
@@ -65,7 +65,7 @@ export class GCalEvent {
         for (let i = 0; i < diff; i++) {
           const date = addDays(startDate, i);
           const suffix = genSummarySuffix(diff, i);
-          const gCalEvent = genAllDayGCalEvent(suffix)(event, gCalEvent => {
+          const gCalEvent = genAllDayGCalEvent(suffix)(event, (gCalEvent) => {
             gCalEvent.date = date;
             return gCalEvent;
           });
@@ -73,7 +73,7 @@ export class GCalEvent {
         }
         return events;
       } else {
-        const gCalEvent = genAllDayGCalEvent("")(event, gCalEvent => {
+        const gCalEvent = genAllDayGCalEvent("")(event, (gCalEvent) => {
           gCalEvent.date = startDate;
           return gCalEvent;
         });
@@ -86,7 +86,7 @@ export class GCalEvent {
       if (diff > 1) {
         const events: GCalEvent[] = [];
         const startSuffix = genSummarySuffix(diff, 0);
-        const startEvent = genGCalEvent(startSuffix)(event, gCalEvent => {
+        const startEvent = genGCalEvent(startSuffix)(event, (gCalEvent) => {
           gCalEvent.startTime = startTime;
           gCalEvent.date = getDate(startTime);
           return gCalEvent;
@@ -98,7 +98,7 @@ export class GCalEvent {
           date = getDate(date);
 
           const suffix = genSummarySuffix(diff, i);
-          const gCalEvent = genAllDayGCalEvent(suffix)(event, gCalEvent => {
+          const gCalEvent = genAllDayGCalEvent(suffix)(event, (gCalEvent) => {
             gCalEvent.date = date;
             return gCalEvent;
           });
@@ -106,7 +106,7 @@ export class GCalEvent {
         }
 
         const endSuffix = genSummarySuffix(diff, diff - 1);
-        const endEvent = genGCalEvent(endSuffix)(event, gCalEvent => {
+        const endEvent = genGCalEvent(endSuffix)(event, (gCalEvent) => {
           gCalEvent.endTime = endTime;
           gCalEvent.date = getDate(endTime);
           return gCalEvent;
@@ -115,7 +115,7 @@ export class GCalEvent {
 
         return events;
       } else {
-        const gCalEvent = genGCalEvent("")(event, gCalEvent => {
+        const gCalEvent = genGCalEvent("")(event, (gCalEvent) => {
           gCalEvent.date = getDate(startTime);
           gCalEvent.startTime = startTime;
           gCalEvent.endTime = endTime;

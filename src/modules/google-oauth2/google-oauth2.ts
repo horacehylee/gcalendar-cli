@@ -1,87 +1,87 @@
-const google = require("googleapis");
-import * as fs from "fs";
-import { promisify } from "bluebird";
-import { TOKEN_PATH, CRED_PATH } from "./../../config";
-import * as readline from "readline";
-import * as inquirer from "inquirer";
+import { google, Auth } from "googleapis";
+import fs from "fs";
+import { promisify } from "util";
 import chalk from "chalk";
-import * as opn from "opn";
+import opn from "opn";
+import inquirer from "inquirer";
 
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 
-const _authorize = credentialPath => async (scopes: string[]) => {
-  const oauth2Client = await getOauth2ClientFromFile(credentialPath);
-  let tokens;
+interface AuthorizeOptions {
+  scopes: string[];
+  tokenPath: string;
+  credentialPath: string;
+}
+export async function authorize({
+  scopes,
+  tokenPath,
+  credentialPath,
+}: AuthorizeOptions): Promise<Auth.OAuth2Client> {
+  let content: Buffer;
   try {
-    tokens = await getToken();
-  } catch (e) {
-    tokens = await fetchToken(scopes)(oauth2Client);
+    content = await readFileAsync(credentialPath);
+  } catch (err) {
+    console.error("Error loading client secret file:", err);
+    throw err;
   }
-  oauth2Client.credentials = tokens;
-  return oauth2Client;
-};
-export const authorize = _authorize(CRED_PATH);
+  const {
+    client_id: clientId,
+    client_secret: clientSecret,
+    redirect_uris: redirectUris,
+  } = JSON.parse(content.toString("utf8")).installed;
+  const oAuth2Client = new google.auth.OAuth2(
+    clientId,
+    clientSecret,
+    redirectUris[0]
+  );
 
-const fetchToken = (scopes: string[]) => async oauth2Client => {
-  const authUrl = oauth2Client.generateAuthUrl({
+  let credentials: Auth.Credentials;
+  try {
+    credentials = await readTokenFromFile(tokenPath);
+  } catch (e) {
+    credentials = await fetchNewToken({ scopes, tokenPath, oAuth2Client });
+  }
+  oAuth2Client.credentials = credentials;
+  return oAuth2Client;
+}
+
+async function readTokenFromFile(tokenPath: string): Promise<Auth.Credentials> {
+  const content = await readFileAsync(tokenPath);
+  return JSON.parse(content.toString("utf8"));
+}
+
+async function fetchNewToken({
+  oAuth2Client,
+  scopes,
+  tokenPath,
+}: {
+  oAuth2Client: Auth.OAuth2Client;
+  scopes: string[];
+  tokenPath: string;
+}): Promise<Auth.Credentials> {
+  const authUrl = oAuth2Client.generateAuthUrl({
     access_type: "offline",
-    scope: scopes
+    scope: scopes,
   });
   console.log(
     `Authorize this app by visiting this url:\n${chalk.greenBright(authUrl)}`
   );
   opn(authUrl);
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
 
   const question: inquirer.Question = {
     type: "input",
     message: "Enter the code from that page here:",
-    name: "code"
+    name: "code",
   };
   const { code } = await inquirer.prompt(question);
   try {
-    const tokens = await promisify(oauth2Client.getToken).bind(oauth2Client)(
-      code
-    );
-    await storeToken(tokens);
+    const { tokens } = await oAuth2Client.getToken(code);
+    await writeFileAsync(tokenPath, JSON.stringify(tokens));
+    console.log("Token stored to", tokenPath);
     return tokens;
   } catch (err) {
-    console.log("Error while trying to retrieve access token", err);
+    console.error("Failed to retrieve OAuth2 token", err);
     throw err;
   }
-};
-
-export const getOauth2ClientFromFile = async (credentialPath: string) => {
-  const content = await readFileAsync(credentialPath);
-  const {
-    client_id: clientId,
-    client_secret: clientSecret,
-    redirect_uris: redirectUris
-  } = JSON.parse(content.toString("utf8")).installed;
-  return new google.auth.OAuth2(clientId, clientSecret, redirectUris[0]);
-};
-
-export const generateAuthUrl = async (oauth2Client: any, scopes: string[]) => {
-  const authUrl = oauth2Client.generateAuthUrl({
-    access_type: "offline",
-    scope: scopes
-  });
-  return authUrl;
-};
-
-// Token Storage
-const _storeToken = (tokenPath: string) => async (tokens: any) => {
-  writeFileAsync(tokenPath, JSON.stringify(tokens));
-};
-
-const _getToken = (tokenPath: string) => async () => {
-  const tokenString = await readFileAsync(tokenPath);
-  return JSON.parse(tokenString.toString("utf8"));
-};
-
-export const storeToken = _storeToken(TOKEN_PATH);
-export const getToken = _getToken(TOKEN_PATH);
+}

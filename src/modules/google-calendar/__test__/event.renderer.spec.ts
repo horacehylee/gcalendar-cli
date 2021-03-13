@@ -1,7 +1,7 @@
-import * as parse from "date-fns/parse";
+import parse from "date-fns/parse";
 import {
   renderEventsList,
-  renderEventsTable
+  renderEventsTable,
 } from "./../renderer/cli-renderer";
 
 describe("Event Renderer", () => {
@@ -11,22 +11,22 @@ describe("Event Renderer", () => {
       calendarId: "unknownorganizer@calendar.google.com",
       calendarDisplayName: "Google Calendar",
       date: parse("2017-12-27"),
-      startTime: parse("2017-12-27T18:30:00+08:00")
+      startTime: parse("2017-12-27T18:30:00+08:00"),
     },
     {
       summary: "Multiple days event with time (Day 2/3)",
       calendarId: "unknownorganizer@calendar.google.com",
       calendarDisplayName: "Google Calendar",
       allDay: true,
-      date: parse("2017-12-28")
+      date: parse("2017-12-28"),
     },
     {
       summary: "Multiple days event with time (Day 3/3)",
       calendarId: "unknownorganizer@calendar.google.com",
       calendarDisplayName: "Google Calendar",
       date: parse("2017-12-29"),
-      endTime: parse("2017-12-29T19:00:00+08:00")
-    }
+      endTime: parse("2017-12-29T19:00:00+08:00"),
+    },
   ];
 
   it("should render events in table", () => {

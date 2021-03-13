@@ -1,21 +1,21 @@
 import { CommandModule } from "yargs";
 
 import { isEmpty } from "lodash";
-import * as Sherlock from "sherlockjs";
-import * as inquirer from "inquirer";
+import Sherlock from "sherlockjs";
+import inquirer from "inquirer";
 import { log, pretty } from "./index";
 import {
   resetTime,
   ppObjDate,
   diffHours,
-  diffHoursToString
+  diffHoursToString,
 } from "../modules/google-calendar/fns/util.fns";
-import * as addDays from "date-fns/add_days";
-import * as addHours from "date-fns/add_hours";
+import addDays from "date-fns/add_days";
+import addHours from "date-fns/add_hours";
 import sentenceCase = require("sentence-case");
 import {
   getCalendarClient,
-  insertEvent
+  insertEvent,
 } from "../modules/google-calendar/google-calendar";
 import chalk from "chalk";
 import { loading } from "./../modules/promise-loading/promise-loading";
@@ -64,7 +64,7 @@ export const parseInsertCommand = (
     title: sentenceCase(eventTitle),
     start: startDate,
     end: endDate,
-    isAllDay: isAllDay
+    isAllDay: isAllDay,
   };
 };
 
@@ -76,15 +76,15 @@ export const InsertCommand: CommandModule = {
     duration: {
       alias: "d",
       describe: "Duration of the event",
-      type: "number"
+      type: "number",
     },
     calendar: {
       alias: "c",
       describe: "Calendar for event to insert",
-      type: "string"
-    }
+      type: "string",
+    },
   },
-  handler: async argv => {
+  handler: async (argv) => {
     let { info, duration, calendar } = argv;
 
     // check calendar exists
@@ -97,7 +97,7 @@ export const InsertCommand: CommandModule = {
       pretty(
         ppObjDate({
           ...options,
-          duration: diffHoursToString(diffHours(options.end, options.start))
+          duration: diffHoursToString(diffHours(options.end, options.start)),
         })
       )
     );
@@ -105,7 +105,7 @@ export const InsertCommand: CommandModule = {
       type: "confirm",
       name: "confirm",
       default: false,
-      message: `Are you sure to insert this event into calendar?`
+      message: `Are you sure to insert this event into calendar?`,
     };
     const { confirm } = await inquirer.prompt(question);
     if (!confirm) {
@@ -113,16 +113,16 @@ export const InsertCommand: CommandModule = {
     }
 
     const calendarClient = await loading({
-      message: "Creating calendar client"
+      message: "Creating calendar client",
     })(getCalendarClient());
     const insertEventPromise = insertEvent(calendarClient)({
       start: options.start,
       end: options.end,
       isAllDay: options.isAllDay,
-      summary: options.title
+      summary: options.title,
     })(calendar);
     await loading({ message: "Inserting event" })(insertEventPromise);
 
     log("Event is inserted");
-  }
+  },
 };

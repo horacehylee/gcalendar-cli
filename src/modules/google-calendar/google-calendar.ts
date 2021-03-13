@@ -1,36 +1,38 @@
-const google = require("googleapis");
+import { google, calendar_v3 } from "googleapis";
 import { authorize } from "../google-oauth2/google-oauth2";
-import { promisify } from "bluebird";
-import { default as chalk } from "chalk";
 import { Calendar } from "./models/calendar";
 import { plainToClass } from "class-transformer";
 import { GCalEvent } from "./models/event";
 import { flatten, isEmpty } from "lodash";
-import * as addWeeks from "date-fns/add_weeks";
-import * as format from "date-fns/format";
+import addWeeks from "date-fns/add_weeks";
+import format from "date-fns/format";
+import { CRED_PATH, TOKEN_PATH } from "../../config";
 
 const error = console.error;
 
 const SCOPES = [
   "https://www.googleapis.com/auth/calendar",
-  "https://www.googleapis.com/auth/calendar.readonly"
+  "https://www.googleapis.com/auth/calendar.readonly",
 ];
 
 const INSERT_DATE_FORMAT = "YYYY-MM-DD";
 const INSERT_DATETIME_FORMAT = "YYYY-MM-DDTHH:mm:ss.SSSZ";
 
-export const getCalendarClient = async () => {
-  const oauth2Client = await authorize(SCOPES);
+export const getCalendarClient = async (): Promise<calendar_v3.Calendar> => {
+  const oauth2Client = await authorize({
+    scopes: SCOPES,
+    tokenPath: TOKEN_PATH,
+    credentialPath: CRED_PATH,
+  });
   return google.calendar({ version: "v3", auth: oauth2Client });
 };
 
-export const listCalendars = async calendar => {
-  const params: any = {
-    maxResults: 100
+export const listCalendars = async (calendar: calendar_v3.Calendar) => {
+  const params: calendar_v3.Params$Resource$Calendarlist$List = {
+    maxResults: 100,
   };
-  const { nextPageToken, items } = await promisify<any, any>(
-    calendar.calendarList.list
-  )(params);
+  const { data } = await calendar.calendarList.list(params);
+  const { items } = data;
   const calendars = plainToClass<Calendar, {}[]>(Calendar, items);
   return calendars;
 };
@@ -41,12 +43,12 @@ export interface ListEventOptions {
 }
 
 export const listEvents = async (
-  calendarClient,
+  calendarClient: calendar_v3.Calendar,
   calendarId = "primary",
   options: ListEventOptions = {}
 ) => {
-  const params: any = {
-    calendarId: encodeURIComponent(calendarId),
+  const params: calendar_v3.Params$Resource$Events$List = {
+    calendarId: calendarId,
     timeMin: options.timeMin
       ? options.timeMin.toISOString()
       : new Date().toISOString(),
@@ -55,22 +57,19 @@ export const listEvents = async (
       : addWeeks(new Date(), 1).toISOString(),
     maxResults: 100,
     singleEvents: true,
-    orderBy: "startTime"
+    orderBy: "startTime",
   };
-  const calendarClientEventListPromise = promisify<any, any>(
-    calendarClient.events.list
-  );
+
   try {
     let events = [];
     let pageToken = "";
     do {
-      const pagingParams = {
+      const pagingParams: calendar_v3.Params$Resource$Events$List = {
         ...params,
-        pageToken: pageToken
+        pageToken: pageToken,
       };
-      const { nextPageToken, items } = await calendarClientEventListPromise(
-        pagingParams
-      );
+      const { data } = await calendarClient.events.list(pagingParams);
+      const { nextPageToken, items } = data;
       pageToken = nextPageToken;
       events = events.concat(items);
     } while (!isEmpty(pageToken));
@@ -90,43 +89,41 @@ export interface InsertEventOptions {
   isAllDay?: boolean;
 }
 
-export const insertEvent = (calendarClient: any) => (
+export const insertEvent = (calendarClient: calendar_v3.Calendar) => (
   options: InsertEventOptions
 ) => async (calendarId: string = "primary") => {
   const { summary, start, end, isAllDay } = options;
   let event: any = {
-    summary: summary
+    summary: summary,
   };
   if (isAllDay) {
     event = {
       ...event,
       start: {
-        date: format(start, INSERT_DATE_FORMAT)
+        date: format(start, INSERT_DATE_FORMAT),
       },
       end: {
-        date: format(end, INSERT_DATE_FORMAT)
-      }
+        date: format(end, INSERT_DATE_FORMAT),
+      },
     };
   } else {
     event = {
       ...event,
       start: {
-        dateTime: format(start, INSERT_DATETIME_FORMAT)
+        dateTime: format(start, INSERT_DATETIME_FORMAT),
       },
       end: {
-        dateTime: format(end, INSERT_DATETIME_FORMAT)
-      }
+        dateTime: format(end, INSERT_DATETIME_FORMAT),
+      },
     };
   }
   let params: any = {
     calendarId: calendarId,
-    resource: event
+    resource: event,
   };
   try {
-    const insertedEvent = await promisify<any, any>(
-      calendarClient.events.insert
-    )(params);
-    const gCalEvents = GCalEvent.gen(insertedEvent);
+    const { data } = await calendarClient.events.insert(params);
+    const gCalEvents = GCalEvent.gen(data);
     return gCalEvents;
   } catch (e) {
     error(`calendarId(${calendarId}) insert event error occured`, e);
